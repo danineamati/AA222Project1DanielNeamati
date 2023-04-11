@@ -41,14 +41,32 @@ Returns:
     - The location of the minimum
 """
 function optimize(f, g, x0, n, prob)
-    optimize_extra(f, g, x0, n, prob)
+
+    if prob == "simple1"
+        lr = 10^-3
+        rand_factor = 20
+    elseif prob == "simple2"
+        lr = 10^-2
+        rand_factor = 5
+    elseif prob == "simple3"
+        lr = 5 * 10^-2
+        rand_factor = 0.2
+    else
+        lr = 10^-3
+        rand_factor = 10
+    end
+
+    optimize_gradient_descent(f, g, x0, n, lr, rand_factor)
 end
 
 
-function optimize_extra(f, g, x0, n, prob, verbose::Bool = false, learning_rate::float = 10^-2)
+function optimize_gradient_descent(f, g, x0, n, learning_rate = 10^-2, rand_factor = 10, verbose::Bool = false)
     x_curr = x0
     f_curr = f(x_curr)
     n = n - 1
+
+    # Dimensionality
+    n_dim = length(x0)
 
     x_tried = [x_curr]
     f_tried = [f_curr]
@@ -81,14 +99,21 @@ function optimize_extra(f, g, x0, n, prob, verbose::Bool = false, learning_rate:
         #     ratio < 1 so we should stay closer
         f_ratio = f_curr / f_new
 
-        x_curr = x_curr - learning_rate * d_gradient * f_ratio
-        f_curr = f(x_curr)
+        x_new_2 = x_curr - learning_rate * d_gradient * f_ratio
+        f_new_2 = f(x_new_2)
         n = n - 1 # Function costs 1
 
-        push!(x_tried, x_curr)
-        push!(f_tried, f_curr)
+        push!(x_tried, x_new_2)
+        push!(f_tried, f_new_2)
 
-        if verbose println("Iteration $iteration_ind part 2: $x_curr with $f_curr (ratio was $f_ratio)") end
+        # Chose the one with lower value
+        if f_new < f_new_2
+            x_curr = x_new + rand_factor * learning_rate * rand(n_dim)
+        else
+            x_curr = x_new_2 + rand_factor * learning_rate * rand(n_dim)
+        end
+
+        if verbose println("Iteration $iteration_ind part 2: $x_new_2 with $f_new_2 (ratio was $f_ratio)") end
         iteration_ind += 1
     end
 
