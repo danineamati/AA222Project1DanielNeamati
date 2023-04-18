@@ -38,6 +38,8 @@ function calc_contours(f, lowercorner::Vector, uppercorner::Vector,
 end
 
 
+# ROSENBROCK
+
 rosen_lower = [-4, -2]
 rosen_upper = [4, 6]
 
@@ -63,3 +65,31 @@ c_rosen_log10 = contour(rosen_xs, rosen_ys, rosen_zs_log10_clamped,
     dpi=400)
 display(c_rosen_log10)
 savefig(c_rosen_log10, "plots/c_rosen_log10.png")
+
+## HIMMELBLAU
+
+hblau_lower = [-5, -6]
+hblau_upper = [6, 6]
+
+hblau_xs, hblau_ys, hblau_zs = calc_contours(himmelblau, hblau_lower, hblau_upper, 600, 400)
+
+c_hblau_base = contour(hblau_xs, hblau_ys, hblau_zs', 
+    color=cgrad(:turbo, rev = true), clabels=true, 
+    framestyle = :box, grid=true, 
+    xlabel=L"x", ylabel=L"y", title="Himmelblau Contours",
+    dpi=400)
+display(c_hblau_base)
+savefig(c_hblau_base, "plots/c_hblau_base.png")
+
+tv = -2.5:0.5:3
+tl = [L"10^{%$i}" for i in tv]
+hblau_zs_log10_clamped = clamp.(log10.(hblau_zs'), tv[1], tv[end]);
+
+c_hblau_log10 = contour(hblau_xs, hblau_ys, hblau_zs_log10_clamped, 
+    color=cgrad(:turbo, rev = true), clabels=true, 
+    levels=length(tv)-2, colorbar_ticks=(tv, tl), 
+    framestyle = :box, grid=true, gridalpha=0.5,
+    xlabel=L"x", ylabel=L"y", title="Log10 of Himmelblau Contours",
+    dpi=400)
+display(c_hblau_log10)
+savefig(c_hblau_log10, "plots/c_hblau_log10.png")
