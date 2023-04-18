@@ -39,57 +39,59 @@ end
 
 
 # ROSENBROCK
+function plot_rosenbrock_contours(with_log10::Bool=true, 
+    lowercorner::Vector=[-4, -2], uppercorner::Vector=[4, 6], 
+    n_x::Integer=600, n_y::Integer=400)
 
-rosen_lower = [-4, -2]
-rosen_upper = [4, 6]
+    rosen_xs, rosen_ys, rosen_zs = calc_contours(rosenbrock, lowercorner, uppercorner, n_x, n_y)
 
-rosen_xs, rosen_ys, rosen_zs = calc_contours(rosenbrock, rosen_lower, rosen_upper, 600, 400)
+    if with_log10
+        tv = -3:0.5:4
+        tl = [L"10^{%$i}" for i in tv]
+        rosen_zs_log10_clamped = clamp.(log10.(rosen_zs'), tv[1], tv[end]);
 
-c_rosen_base = contour(rosen_xs, rosen_ys, rosen_zs', 
-    color=cgrad(:turbo, rev = true), clabels=true, 
-    framestyle = :box, grid=true, 
-    xlabel=L"x", ylabel=L"y", title="Rosenbrock Contours",
-    dpi=400)
-display(c_rosen_base)
-savefig(c_rosen_base, "plots/c_rosen_base.png")
+        c_rosen = contour(rosen_xs, rosen_ys, rosen_zs_log10_clamped, 
+            color=cgrad(:turbo, rev = true), clabels=true, 
+            levels=length(tv)-2, colorbar_ticks=(tv, tl), 
+            framestyle = :box, grid=true, gridalpha=0.5,
+            xlabel=L"x", ylabel=L"y", title="Log10 of Rosenbrock Contours",
+            dpi=400)
+    else
+        c_rosen = contour(rosen_xs, rosen_ys, rosen_zs', 
+            color=cgrad(:turbo, rev = true), clabels=true, 
+            framestyle = :box, grid=true, 
+            xlabel=L"x", ylabel=L"y", title="Rosenbrock Contours",
+            dpi=400)
+    end
 
-tv = -3:0.5:4
-tl = [L"10^{%$i}" for i in tv]
-rosen_zs_log10_clamped = clamp.(log10.(rosen_zs'), tv[1], tv[end]);
+    return c_rosen
+end
 
-c_rosen_log10 = contour(rosen_xs, rosen_ys, rosen_zs_log10_clamped, 
-    color=cgrad(:turbo, rev = true), clabels=true, 
-    levels=length(tv)-2, colorbar_ticks=(tv, tl), 
-    framestyle = :box, grid=true, gridalpha=0.5,
-    xlabel=L"x", ylabel=L"y", title="Log10 of Rosenbrock Contours",
-    dpi=400)
-display(c_rosen_log10)
-savefig(c_rosen_log10, "plots/c_rosen_log10.png")
+# HIMMELBLAU
+function plot_himmelblau_contours(with_log10::Bool=true, 
+    lowercorner::Vector=[-5, -6], uppercorner::Vector=[6, 6], 
+    n_x::Integer=600, n_y::Integer=400)
+    
+    hblau_xs, hblau_ys, hblau_zs = calc_contours(himmelblau, lowercorner, uppercorner, n_x, n_y)
 
-## HIMMELBLAU
+    if with_log10
+        tv = -2.5:0.5:3
+        tl = [L"10^{%$i}" for i in tv]
+        hblau_zs_log10_clamped = clamp.(log10.(hblau_zs'), tv[1], tv[end]);
 
-hblau_lower = [-5, -6]
-hblau_upper = [6, 6]
+        c_hblau = contour(hblau_xs, hblau_ys, hblau_zs_log10_clamped, 
+            color=cgrad(:turbo, rev = true), clabels=true, 
+            levels=length(tv)-2, colorbar_ticks=(tv, tl), 
+            framestyle = :box, grid=true, gridalpha=0.5,
+            xlabel=L"x", ylabel=L"y", title="Log10 of Himmelblau Contours",
+            dpi=400)
+    else
+        c_hblau = contour(hblau_xs, hblau_ys, hblau_zs', 
+            color=cgrad(:turbo, rev = true), clabels=true, 
+            framestyle = :box, grid=true, 
+            xlabel=L"x", ylabel=L"y", title="Himmelblau Contours",
+            dpi=400)
+    end
 
-hblau_xs, hblau_ys, hblau_zs = calc_contours(himmelblau, hblau_lower, hblau_upper, 600, 400)
-
-c_hblau_base = contour(hblau_xs, hblau_ys, hblau_zs', 
-    color=cgrad(:turbo, rev = true), clabels=true, 
-    framestyle = :box, grid=true, 
-    xlabel=L"x", ylabel=L"y", title="Himmelblau Contours",
-    dpi=400)
-display(c_hblau_base)
-savefig(c_hblau_base, "plots/c_hblau_base.png")
-
-tv = -2.5:0.5:3
-tl = [L"10^{%$i}" for i in tv]
-hblau_zs_log10_clamped = clamp.(log10.(hblau_zs'), tv[1], tv[end]);
-
-c_hblau_log10 = contour(hblau_xs, hblau_ys, hblau_zs_log10_clamped, 
-    color=cgrad(:turbo, rev = true), clabels=true, 
-    levels=length(tv)-2, colorbar_ticks=(tv, tl), 
-    framestyle = :box, grid=true, gridalpha=0.5,
-    xlabel=L"x", ylabel=L"y", title="Log10 of Himmelblau Contours",
-    dpi=400)
-display(c_hblau_log10)
-savefig(c_hblau_log10, "plots/c_hblau_log10.png")
+    return c_hblau
+end
