@@ -70,6 +70,11 @@ end
 
 
 function optimize_gradient_descent(f, g, x0, n, learning_rate = 10^-2, rand_factor = 1, max_movement_len = 10, verbose::Bool = false)
+    if verbose 
+        println("    START")
+        println("Counter Check: #f=$(count(f)) & #g=$(count(g))")
+    end
+    
     x_curr = x0
     f_curr = f(x_curr)
     n = n - 1
@@ -91,6 +96,7 @@ function optimize_gradient_descent(f, g, x0, n, learning_rate = 10^-2, rand_fact
     
     while n > 4 + spare
         # We need 4 evaluations per loop
+        if verbose println("Counter Check: #f=$(count(f)) & #g=$(count(g))") end
 
         # Calculate the Gradient and append it
         d_gradient = g(x_curr)
@@ -176,6 +182,8 @@ function optimize_gradient_descent(f, g, x0, n, learning_rate = 10^-2, rand_fact
 
     if verbose println("Selected $x_best with score $f_best") end
     if verbose println("$n evaluations left") end
+
+    if verbose println("Counter Check: #f=$(count(f)) & #g=$(count(g))") end
 
     return x_curr
 end
