@@ -82,8 +82,14 @@ function optimize_gradient_descent(f, g, x0, n, learning_rate = 10^-2, rand_fact
     g_tried = []
 
     iteration_ind = 1
+
+    if n >= 30
+        spare = 4
+    else
+        spare = 2
+    end
     
-    while n > 4
+    while n > 4 + spare
         # We need 4 evaluations per loop
 
         # Calculate the Gradient and append it
