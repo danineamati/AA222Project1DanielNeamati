@@ -42,10 +42,10 @@ savefig(plt_rosen, "plots/converge_rosen.png")
 plt_hblau = run_record_many(himmelblau, himmelblau_init, 40, 1000)
 title!("Himmelblau Convergence")
 display(plt_hblau)
-savefig(plt_hblau, "plots/converge_rosen.png")
+savefig(plt_hblau, "plots/converge_hblau.png")
 
 # Powell
 plt_powell = run_record_many(powell, powell_init, 100, 1000)
 title!("Powell Convergence")
 display(plt_powell)
-savefig(plt_powell, "plots/converge_rosen.png")
+savefig(plt_powell, "plots/converge_powell.png")
