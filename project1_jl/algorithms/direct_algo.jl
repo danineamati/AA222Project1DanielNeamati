@@ -2,7 +2,7 @@
 #= 
     Nelder Mead Simplex algorithm
 =#
-function nelder_mead(f, S, ϵ; α=1.0, β=2.0, γ=0.5)
+function nelder_mead(f, S, ϵ; tape=false, α=1.0, β=2.0, γ=0.5)
     Δ, y_arr = Inf, f.(S)
     while Δ > ϵ
         p = sortperm(y_arr) # sort lowest to highest
