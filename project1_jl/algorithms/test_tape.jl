@@ -8,16 +8,13 @@ get_xy() = (randn(), randn())
 
 for _ in range(1, 10)
     xi, yi = get_xy()
-    record_x_state!(tape, [xi, yi])
-    record_text!(tape, "Sample X")
+    record_x_only!(tape, [xi, yi], "rand X (1/2)")
 
     xi, yi = get_xy()
-    record_x_state!(tape, [xi, yi])
-    record_text!(tape, "Sample X")
+    record_x_only!(tape, [xi, yi], "rand X (2/2)")
 
     fi = f(xi, yi)
-    record_f_history!(tape, fi)
-    record_text!(tape, "Evaluate f")
+    record_history!(tape, [xi, yi], fi, "Evaluate f")
 end
 
 print_tape(tape)

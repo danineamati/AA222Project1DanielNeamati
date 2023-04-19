@@ -1,9 +1,16 @@
+include("tape.jl")
 
 #= 
     Nelder Mead Simplex algorithm
 =#
-function nelder_mead(f, S, ϵ; tape=false, α=1.0, β=2.0, γ=0.5)
+function nelder_mead(f, S, ϵ; α=1.0, β=2.0, γ=0.5)
+    # Initialize the tape
+    tape = initialize_Tape()
+    record_params!(tape, [α, β, γ])
+
+    # Record the initial point
     Δ, y_arr = Inf, f.(S)
+
     while Δ > ϵ
         p = sortperm(y_arr) # sort lowest to highest
         S, y_arr = S[p], y_arr[p]
