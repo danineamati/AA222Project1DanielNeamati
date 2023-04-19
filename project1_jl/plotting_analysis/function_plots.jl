@@ -9,8 +9,8 @@ using Plots
 using LaTeXStrings
 
 # Import the simple.jl file to have access to the main functions 
-include("helpers.jl")
-include("simple.jl")
+include("../helpers.jl")
+include("../simple.jl")
 
 function calc_contours(f, lowercorner::Vector, uppercorner::Vector, 
     n_x::Integer=100, n_y::Integer=80)

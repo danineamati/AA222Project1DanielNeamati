@@ -42,7 +42,14 @@ Returns:
     - The location of the minimum
 """
 function optimize(f, g, x0, n, prob)
+    
+    S_best, _ = optimize_with_history(f, g, x0, n, prob)
 
+    return S_best
+end
+
+
+function optimize_with_history(f, g, x0, n, prob)
     s1 = x0
     n_dims = length(x0)
     s2 = x0 + randn(n_dims)
@@ -55,5 +62,5 @@ function optimize(f, g, x0, n, prob)
         tape_print(tape)
     end
 
-    return S_best
+    return S_best, tape
 end

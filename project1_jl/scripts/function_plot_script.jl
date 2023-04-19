@@ -1,7 +1,7 @@
 # Here we will use the previous functions to plot the relevant contours
 # NO Optimization computation
 
-include("../function_plots.jl")
+include("../plotting_analysis/function_plots.jl")
 
 ## ROSENBROCK
 rosen_lower = [-4, -2]
