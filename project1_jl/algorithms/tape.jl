@@ -11,14 +11,34 @@ mutable struct Tape
     fHistory # The history of function evaluations
     textHistory # The history of evaluation types
     hyperparams # The hyperparameters used in this run
+    budget # The budget remaining
 end
 
 function initialize_Tape()
-    return Tape([], [], [], nothing)
+    return Tape([], [], [], nothing, Inf)
 end
 
 function record_params!(tape::Tape, params)
     tape.hyperparams = params
+end
+
+function set_budget!(tape::Tape, budget::Integer)
+    tape.budget = budget
+end
+
+function has_enough(tape, counts, cost)
+    if (tape.budget - counts) >= cost
+        return true
+    end
+    return false
+end
+
+function has_enough_for_f_eval(tape, counts; f_cost=1)
+    return has_enough(tape, counts, f_cost)
+end
+
+function has_enough_for_g_eval(tape, counts; g_cost=2)
+    return has_enough(tape, counts, g_cost)
 end
 
 function check_valid_history(tape::Tape)
@@ -70,7 +90,7 @@ function zip_history(tape::Tape)
     return zip(tape.xHistory, tape.fHistory, tape.textHistory)
 end
 
-function print_tape(tape::Tape; tlen=24, fdigits=5)
+function tape_print(tape::Tape; tlen=24, fdigits=5, restrict_tot_len=200)
     println("Printing Tape:")
     println("Hyperparameters: $(tape.hyperparams)\n")
     assert_valid_history(tape)
@@ -87,14 +107,19 @@ function print_tape(tape::Tape; tlen=24, fdigits=5)
 
 
         f_format_len = fdigits*2 + 2    # +2 for decimal and sign
-        if isfinite(f)
-            f_format = lpad(round(f, digits=fdigits), f_format_len)
+        if all(isfinite.(f))
+            f_format = lpad(round.(f, digits=fdigits), f_format_len)
         else
             f_format = lpad(f, f_format_len, " ")
         end
 
         # Format the function evaluation
-        println("$ind_format | $txt_format | $f_format | $x")
+        row_text = "$ind_format | $txt_format | $f_format | $x"
+        if length(row_text) > restrict_tot_len
+            row_text = row_text[1:restrict_tot_len]
+        end
+
+        println(row_text)
     end
 end
 

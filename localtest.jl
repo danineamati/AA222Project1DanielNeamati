@@ -84,19 +84,24 @@ function compare_optimize_to_random(probname, K)
     # lower is better
     better = scores .< random_scores
 
-    return mean(better)
+    # return mean(better)
+    return mean(better), mean(scores)
 end
 
 
 printstyled("\nTesting $K times\n\n", bold = true)
 for nm in probnames
     try
-        better_percent = 100 * compare_optimize_to_random(nm, K)
+        # better_percent = 100 * compare_optimize_to_random(nm, K)
+        better_frac, mean_score = compare_optimize_to_random(nm, K)
+        better_percent = 100 * better_frac
 
         if better_percent > 55
             printstyled("Pass: optimize does better than random search $(better_percent)% of the time on $(nm)!\n", color = :green)
+            printstyled("Pass: SCORE is $(mean_score)!\n", color = :green)
         else
             printstyled("Fail: optimize only beat random search $(better_percent)% of the time on $nm.\n", color = :red)
+            printstyled("Pass: SCORE is $(mean_score)!\n", color = :red)
         end
 
     catch e

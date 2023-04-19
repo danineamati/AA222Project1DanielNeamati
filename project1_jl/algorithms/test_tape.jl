@@ -17,4 +17,4 @@ for _ in range(1, 10)
     record_history!(tape, [xi, yi], fi, "Evaluate f")
 end
 
-print_tape(tape)
+tape_print(tape)
