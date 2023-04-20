@@ -1,5 +1,35 @@
 include("tape.jl")
 
+# Initialize Nelder Mead
+function initialize_random_nelder_mead(x0, scaling)
+    S = [x0]
+    n_dims = length(x0)
+    for _ in 1:n_dims
+        push!(S, x0 + scaling * randn(n_dims))
+    end
+
+    return S
+end
+
+
+function initialize_han_nelder_mead(x0, scaling)
+    S = []
+    n_dims = length(x0)
+
+    for dim_ind in 1:n_dims
+        x_new = float(copy(x0))
+        x_new[dim_ind] += scaling
+        push!(S, x_new)
+    end
+
+    dimlast_factor = (1 - sqrt(n_dims + 1)) / n_dims
+    xlast = x0 + dimlast_factor * scaling * ones(n_dims)
+    push!(S, xlast)
+    return S
+end
+
+initialize_han_nelder_mead([3, 4], 0.5)
+
 #= 
     Nelder Mead Simplex algorithm
 =#

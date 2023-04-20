@@ -13,12 +13,8 @@ function run_record_many(f, f_init, n, n_runs)
         # Initialize
         empty!(COUNTERS) # fresh eval-count each time
         x0 = f_init()
-        n_dims = length(x0)
-        S = [x0]
-        n_dims = length(x0)
-        for _ in 1:n_dims
-            push!(S, x0 + randn(n_dims))
-        end
+        # S = initialize_random_nelder_mead(x0, 1)
+        S = initialize_han_nelder_mead(x0, 1)
 
         _, tape = nelder_mead(f, S, n_budget=n)
 

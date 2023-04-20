@@ -50,11 +50,18 @@ end
 
 
 function optimize_with_history(f, g, x0, n, prob)
-    S = [x0]
-    n_dims = length(x0)
-    for _ in 1:n_dims
-        push!(S, x0 + randn(n_dims))
+    # S = initialize_random_nelder_mead(x0, 1)
+    if prob == "simple1"
+        init_scaling = 0.9
+    elseif prob == "simple2"
+        init_scaling = 0.75
+    elseif prob == "simple3"
+        init_scaling = 2
+    else
+        init_scaling = 1
     end
+
+    S = initialize_han_nelder_mead(x0, init_scaling)
     
     S_best, tape = nelder_mead(f, S, n_budget=n)
 
