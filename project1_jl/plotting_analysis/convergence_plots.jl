@@ -30,7 +30,7 @@ end
 
 
 function plot_convergence(stack_of_tapes::Vector{Tape}; nx_labels=5)
-    plt = plot(framestyle = :box)
+    plt = plot(framestyle = :box, dpi=400)
 
     # Calculate the mean trajectory
     last_n_vals = [t.nHistory[end] for t in stack_of_tapes]
