@@ -6,7 +6,10 @@ include("../project1.jl")
 include("../plotting_analysis/function_plots.jl")
 include("../plotting_analysis/simplex_trajectory_plots.jl")
 
-for (f, fname, savename) in [(rosenbrock, "Rosenbrock", "rosen"), (himmelblau, "Himmelblau", "hblau")]
+rosen_package = (rosenbrock, "Rosenbrock", "rosen")
+hblau_package = (himmelblau, "Himmelblau", "hblau")
+
+for (f, fname, savename) in [rosen_package, hblau_package]
 
     for show_log10 in [false, true]
         # Plot the contours
@@ -16,8 +19,9 @@ for (f, fname, savename) in [(rosenbrock, "Rosenbrock", "rosen"), (himmelblau, "
             plt = plot_himmelblau_contours(show_log10)
         end
 
-        x0vals = [[-3, -1], [3, 3], [-3, 4]]
-        cgrad_vals_each = [[:plum1, :purple], [:lightblue, :royalblue4], [:rosybrown1, :rosybrown4]]
+        # [[-3, -1], [3, 3], [-3, 4]]
+        x0vals = [[-2.01, -1.4], [-1.99, -1.4], [3, 3], [-3, 4]]
+        cgrad_vals_each = [[:plum1, :purple], [:lightblue, :royalblue4], [:rosybrown1, :rosybrown4], [:coral1, :coral4]]
 
         for (x0, cgrad_choice) in zip(x0vals, cgrad_vals_each)
             empty!(COUNTERS) # fresh eval-count each time
