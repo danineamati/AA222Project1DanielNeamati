@@ -26,6 +26,10 @@ function set_budget!(tape::Tape, budget::Integer)
     tape.budget = budget
 end
 
+function get_n_dims(tape::Tape)
+    length(tape.xHistory[1][1])
+end
+
 function has_enough(tape, counts, cost)
     if (tape.budget - counts) >= cost
         return true
