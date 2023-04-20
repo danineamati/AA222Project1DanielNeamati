@@ -56,14 +56,21 @@ function optimize_with_history(f, g, x0, n, prob)
     elseif prob == "simple2"
         init_scaling = 0.75
     elseif prob == "simple3"
-        init_scaling = 2
+        init_scaling = 1
     else
         init_scaling = 1
     end
 
     S = initialize_han_nelder_mead(x0, init_scaling)
+
+    n_dims = length(x0)
+
+    # Han Nelder Mead parameters
+    αHan = 1.0
+    βHan = 1.0 + (2 / n_dims)
+    γHan = 0.75 - (1 / (2 * n_dims))
     
-    S_best, tape = nelder_mead(f, S, n_budget=n)
+    S_best, tape = nelder_mead(f, S, n_budget=n, α=αHan, β=βHan, γ=γHan)
 
     if count(f) > n
         tape_print(tape)
