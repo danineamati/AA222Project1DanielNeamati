@@ -47,7 +47,7 @@ function nelder_mead(f, S; n_budget=Inf, α=1.0, β=2.0, γ=0.5)
     # COST: NUM_DIMS = length(S)
 
     # Record the initial point
-    record_history!(tape, S, y_arr, "Init Simplex ($(count(f)))")
+    record_history!(tape, S, y_arr, "Init Simplex", count(f))
 
     # While we have not used up our budget
     # We will need a max of 3 counts per iteration
@@ -74,7 +74,7 @@ function nelder_mead(f, S; n_budget=Inf, α=1.0, β=2.0, γ=0.5)
             S[end], y_arr[end] = ye < yr ? (xe, ye) : (xr, yr)
 
             # Record the new state and evaluations
-            record_history!(tape, S, y_arr, "Expanded ($(count(f)))")
+            record_history!(tape, S, y_arr, "Expanded", count(f))
 
         elseif (yr ≥ ys) && (has_enough_for_f_eval(tape, count(f)))
             # MAX COST = 2
@@ -104,12 +104,12 @@ function nelder_mead(f, S; n_budget=Inf, α=1.0, β=2.0, γ=0.5)
             end
 
             # Record the new state and evaluations
-            record_history!(tape, S, y_arr, "Contraction ($(count(f)))")
+            record_history!(tape, S, y_arr, "Contraction", count(f))
         else
             S[end], y_arr[end] = xr, yr
 
             # Record the new state and evaluations
-            record_history!(tape, S, y_arr, "Reflection ($(count(f)))")
+            record_history!(tape, S, y_arr, "Reflection", count(f))
         end
         # Δ = std(y_arr, corrected=false)
     end

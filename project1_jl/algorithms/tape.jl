@@ -6,16 +6,16 @@
 
 mutable struct Tape
     # The history arrays have the same length
-    # When information is not available, we put NaN or 
-    xHistory # The history of states
-    fHistory # The history of function evaluations
-    textHistory # The history of evaluation types
-    hyperparams # The hyperparameters used in this run
-    budget # The budget remaining
+    xHistory        # The history of states
+    fHistory        # The history of function evaluations
+    textHistory     # The history of evaluation types
+    nHistory        # The history of f evaluations
+    hyperparams     # The hyperparameters used in this run
+    budget          # The budget remaining
 end
 
 function initialize_Tape()
-    return Tape([], [], [], nothing, Inf)
+    return Tape([], [], [], [], nothing, Inf)
 end
 
 function record_params!(tape::Tape, params)
@@ -46,6 +46,8 @@ function check_valid_history(tape::Tape)
         return false
     elseif length(tape.xHistory) != length(tape.textHistory)
         return false
+    elseif length(tape.xHistory) != length(tape.nHistory)
+        return false
     end
     return true
 end
@@ -68,14 +70,15 @@ function get_history_length!(tape::Tape)
     return length(tape.xHistory)
 end
 
-function record_history!(tape::Tape, x, f_eval, txt)
+function record_history!(tape::Tape, x, f_eval, txt, nUsedSoFar)
     push!(tape.xHistory, x)
     push!(tape.fHistory, f_eval)
     push!(tape.textHistory, txt)
+    push!(tape.nHistory, nUsedSoFar)
 end
 
-function record_x_only!(tape::Tape, x, txt)
-    record_history!(tape, x, NaN, txt)
+function record_x_only!(tape::Tape, x, txt, nUsedSoFar)
+    record_history!(tape, x, NaN, txt, nUsedSoFar)
 end
 
 # function record_f_history!(tape::Tape, f_eval)
@@ -87,16 +90,19 @@ end
 # end
 
 function zip_history(tape::Tape)
-    return zip(tape.xHistory, tape.fHistory, tape.textHistory)
+    return zip(tape.xHistory, tape.fHistory, tape.textHistory, tape.nHistory)
 end
 
-function tape_print(tape::Tape; tlen=24, fdigits=5, restrict_tot_len=200)
+function tape_print(tape::Tape; tlen=18, fdigits=5, restrict_tot_len=200)
     println("Printing Tape:")
     println("Hyperparameters: $(tape.hyperparams)\n")
     assert_valid_history(tape)
-    for (ind, (x, f, t)) in enumerate(zip_history(tape))
+    for (ind, (x, f, t, nUsed)) in enumerate(zip_history(tape))
         # Format the index
         ind_format = lpad(ind, 3, " ")
+
+        # Format the number of counts used so far 
+        n_format = lpad(nUsed, 3, " ")
 
         # Format the text
         if length(t) >= tlen
@@ -114,7 +120,7 @@ function tape_print(tape::Tape; tlen=24, fdigits=5, restrict_tot_len=200)
         end
 
         # Format the function evaluation
-        row_text = "$ind_format | $txt_format | $f_format | $x"
+        row_text = "$ind_format | $n_format | $txt_format | $f_format | $x"
         if length(row_text) > restrict_tot_len
             row_text = row_text[1:restrict_tot_len]
         end

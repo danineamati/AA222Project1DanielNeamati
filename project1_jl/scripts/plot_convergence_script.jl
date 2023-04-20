@@ -23,7 +23,13 @@ function run_record_many(f, f_init, n, n_runs, prob)
     return plt
 end
 
+# Test the optimization and tape
+println("Running test optimization")
+_, tapeTest = optimize_with_history(rosenbrock, nothing, rosenbrock_init(), 20, "simple1")
+tape_print(tapeTest)
 
+_, tapeTest = optimize_with_history(powell, nothing, powell_init(), 20, "simple1")
+tape_print(tapeTest)
 
 # Rosenbrock
 plt_rosen = run_record_many(rosenbrock, rosenbrock_init, 20, 1000, "simple1")
