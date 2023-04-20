@@ -52,13 +52,13 @@ end
 function optimize_with_history(f, g, x0, n, prob)
     # S = initialize_random_nelder_mead(x0, 1)
     if prob == "simple1"
-        init_scaling = 0.9
+        init_scaling = 0.635
     elseif prob == "simple2"
-        init_scaling = 0.75
+        init_scaling = 0.975
     elseif prob == "simple3"
-        init_scaling = 1
+        init_scaling = 0.725
     else
-        init_scaling = 1
+        init_scaling = 0.9
     end
 
     S = initialize_han_nelder_mead(x0, init_scaling)
