@@ -22,8 +22,15 @@ function generate_fractal(optimizer, xrange, yrange)
 end
 
 
-function plot_fractal(fractal, xrange, yrange)
-    return heatmap(xrange, yrange, fractal,
-        xlabel=L"x", ylabel=L"y", dpi=500, 
-        framestyle = :box, grid=true)
+function plot_fractal(fractal, xrange, yrange; f_clim=nothing)
+    if isnothing(f_clim)
+        return heatmap(xrange, yrange, fractal,
+            xlabel=L"x", ylabel=L"y", dpi=500, 
+            framestyle = :box, grid=true)
+    end
+    heatmap(xrange, yrange, fractal,
+            xlabel=L"x", ylabel=L"y", 
+            dpi=500, 
+            framestyle = :box, grid=true,
+            clim=f_clim)
 end
