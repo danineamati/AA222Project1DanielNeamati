@@ -14,8 +14,8 @@ hblau_upper = [6.0, 6.0]
 hblau_clim = (-5.0, 3.0)
 # hblau_clim = (0.0, 10.0)
 
-n_x = 80
-n_y = 30
+n_x = 2005
+n_y = 1001
 
 rosen_package = [rosenbrock, "simple1", 20, rosen_lower, rosen_upper, rosen_clim, "Rosenbrock", "rosen"]
 hblau_package = [himmelblau, "simple2", 40, hblau_lower, hblau_upper, hblau_clim, "Himmelblau", "hblau"]

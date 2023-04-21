@@ -15,13 +15,16 @@ for (f, fname, savename) in [rosen_package, hblau_package]
         # Plot the contours
         if savename == "rosen"
             plt = plot_rosenbrock_contours(show_log10)
+            x0vals = [[-3, -1], [3, 3], [-3, 4]]
         elseif savename == "hblau"
             plt = plot_himmelblau_contours(show_log10)
+            x0vals = [[-2, -1.4], [-0.2, -1], [-0.1, 5]]
         end
 
         # [[-3, -1], [3, 3], [-3, 4]]
-        x0vals = [[-2.01, -1.4], [-1.99, -1.4], [3, 3], [-3, 4]]
-        cgrad_vals_each = [[:plum1, :purple], [:lightblue, :royalblue4], [:rosybrown1, :rosybrown4], [:coral1, :coral4]]
+        # [[-2.01, -1.4], [-1.99, -1.4], [3, 3], [-3, 4]]
+        
+        cgrad_vals_each = [[:plum1, :purple], [:lightblue, :royalblue4], [:rosybrown1, :rosybrown4]] #, [:coral1, :coral4]]
 
         for (x0, cgrad_choice) in zip(x0vals, cgrad_vals_each)
             empty!(COUNTERS) # fresh eval-count each time
