@@ -12,7 +12,7 @@ lang="$(cat ./language.txt)"
 
 if [[ "${lang}" == *"julia"* ]]
 then
-    7z a -r project1.zip language.txt project1_jl/*.jl project1_jl/algorithms/*.jl
+    7z a -r project1.zip language.txt project1_jl/*.jl project1_jl/algorithms/*.jl project1_jl/scripts/*.jl project1_jl/plotting_analysis/*.jl
 elif [[ "${lang}" == *"python"* ]]
 then
     7z a -r project1.zip language.txt project1_py/*.py
